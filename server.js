@@ -5,6 +5,7 @@ var mongoose       = require('mongoose');
 var bodyParser     = require('body-parser');
 var methodOverride = require('method-override');
 var _ = require('underscore');
+var zlib = require('zlib');
 // configuration ===========================================
 	
 // config files
@@ -27,7 +28,7 @@ app.use(methodOverride('X-HTTP-Method-Override')); // override with the X-HTTP-M
 app.use(express.static(__dirname + '/public')); // set the static files location /public/img will be /img for users
 
 // routes ==================================================
-require('./app/routes')(app, router,compressedLog,_); // pass our application into our routes
+require('./app/routes')(app, router,compressedLog,_,zlib); // pass our application into our routes
 
 // start app ===============================================
 app.listen(port);	

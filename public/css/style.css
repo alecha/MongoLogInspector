@@ -3,3 +3,11 @@ body { padding-top:30px; }
 .selected{
     background-color: #ffff00;
 }
+
+.sidebarContainer{
+    position: absolute;
+    left: 0;
+    max-width: 175px;
+    word-wrap: break-word;
+    font-size: 10px;
+}

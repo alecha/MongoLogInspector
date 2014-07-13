@@ -1,4 +1,4 @@
-module.exports = function (app, router, compressedLog, _) {
+module.exports = function (app, router, compressedLog, _, zlib) {
 
     // server routes ===========================================================
     // handle things like api calls
@@ -22,22 +22,47 @@ module.exports = function (app, router, compressedLog, _) {
     router.route('/logs')
         .get(function (req, res) {
             var planLogs = [];
-            compressedLog.find({State: 1}).limit(1000).exec(function (err, logs) {
+            compressedLog.find({State: 1}).limit(10).exec(function (err, logs) {
                 if (err)
                     res.send(err);
+                var logsLength = logs.length;
+                counter = 0;
                 _.each(logs, function (log) {
-                    var attributes = JSON.parse('{"date": "miaData"}'); //call for decrypting
-                    var log = {
+                    var baseLog = {
                         state: log.State,
                         applicationName: log.ApplicationName
                     };
-                    for (var prop in attributes)
-                        log[prop] = attributes[prop]
-                    planLogs.push(log);
+                    decompress(log.CompressedEvents, baseLog, planLogs, logsLength, res, callback);
                 });
-                res.json(planLogs);
             });
         });
 
     app.use('/api', router);
+
+    function callback(res, planLogs) {
+        res.json(planLogs);
+    }
+
+    function decompress(compressed, baseLog, planLogs, logsLength, res, callback) {
+        var buffer = new Buffer(compressed, 'base64').slice(4);
+        zlib.unzip(buffer, function (err, buffer) {
+            counter++;
+            if (!err) {
+                var logDetails = JSON.parse(buffer.toString());
+                for (var i = 0; i < logDetails.length; i++) {
+                    var currentLog = {
+                        state: baseLog.state,
+                        applicationName: baseLog.applicationName
+                    };
+                    for (var prop in logDetails[i])
+                        currentLog[prop] = logDetails[i][prop];
+                    planLogs.push(currentLog);
+                }
+                if (counter  == logsLength) {
+                    callback(res, planLogs);
+                }
+            }
+        });
+    }
+    var counter = 0;
 };

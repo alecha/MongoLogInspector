@@ -4,13 +4,19 @@ angular.module('LogModule', []).factory('LogService', function ($http) {
     $http.get("/api/logs")
         .success(function (logsFromServer) {
             _.each(logsFromServer, function (log) {
-                logs.push(log);
-
                 for (var prop in log) {
                     if (!_.contains(logsProperties, prop))
                         logsProperties.push(prop);
                 }
             });
+
+            _.each(logsFromServer, function (log) {
+                _.each(logsProperties, function (prop) {
+                    if (!log.hasOwnProperty(prop))
+                        log[prop] = "";
+                })
+                logs.push(log);
+            })
         })
         .error(function () {
             console.log('error in get Logs');
