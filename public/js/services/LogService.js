@@ -9,7 +9,6 @@ angular.module('LogModule', []).factory('LogService', function ($http) {
                         logsProperties.push(prop);
                 }
             });
-
             _.each(logsFromServer, function (log) {
                 _.each(logsProperties, function (prop) {
                     if (!log.hasOwnProperty(prop))

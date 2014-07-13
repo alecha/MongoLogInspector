@@ -11,3 +11,12 @@ body { padding-top:30px; }
     word-wrap: break-word;
     font-size: 10px;
 }
+
+table{
+    font-size:11px;
+}
+
+td{
+    max-width:250px;
+    word-wrap: break-word;
+}

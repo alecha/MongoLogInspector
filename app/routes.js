@@ -1,4 +1,4 @@
-module.exports = function (app, router, compressedLog, _, zlib) {
+module.exports = function (app, router, compressedLog, _, zlib, moment) {
 
     // server routes ===========================================================
     // handle things like api calls
@@ -22,7 +22,7 @@ module.exports = function (app, router, compressedLog, _, zlib) {
     router.route('/logs')
         .get(function (req, res) {
             var planLogs = [];
-            compressedLog.find({State: 1}).limit(10).exec(function (err, logs) {
+            compressedLog.find({}).sort({$natural: -1}).limit(100).exec(function (err, logs) {
                 if (err)
                     res.send(err);
                 var logsLength = logs.length;
@@ -54,15 +54,22 @@ module.exports = function (app, router, compressedLog, _, zlib) {
                         state: baseLog.state,
                         applicationName: baseLog.applicationName
                     };
-                    for (var prop in logDetails[i])
-                        currentLog[prop] = logDetails[i][prop];
+                    for (var prop in logDetails[i]) {
+                        if (prop === "timestamp") {
+                            var date = new Date(logDetails[i][prop]*1000);
+                            currentLog[prop] = moment(date);
+                        }
+                        else
+                            currentLog[prop] = logDetails[i][prop];
+                    }
                     planLogs.push(currentLog);
                 }
-                if (counter  == logsLength) {
+                if (counter == logsLength) {
                     callback(res, planLogs);
                 }
             }
         });
     }
+
     var counter = 0;
 };

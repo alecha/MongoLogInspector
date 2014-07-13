@@ -2,7 +2,7 @@ angular.module('LogCtrl', []).controller('LogController', function ($scope, LogS
     $scope.logs = LogService.logs;
     $scope.logsProperties = LogService.logsProperties;
 
-    $scope.visibleLogProperties = ["applicationName", "state"];
+    $scope.visibleLogProperties = ["applicationName", "short_message", "state", "timestamp"];
 
     $scope.toggleLogProperty = function (logProp) {
         if (_.contains($scope.visibleLogProperties, logProp))
