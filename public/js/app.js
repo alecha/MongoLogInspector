@@ -1,0 +1,1 @@
+angular.module('mongoInspectorApp', ['ngRoute', 'appRoutes', 'MainCtrl', 'LogCtrl', 'LogModule']);
