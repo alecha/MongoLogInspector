@@ -5,7 +5,7 @@
             <th ng-repeat="logProp in visibleLogProperties.sort()">{{logProp}}</th>
             </thead>
             <tbody>
-            <tr ng-repeat="log in logs">
+            <tr ng-repeat="log in logs" ng-class="setClass(log)">
                 <td ng-show="visibleLogProperties.indexOf(key)>=0" ng-repeat="(key,value) in log">{{value}}</td>
             </tr>
             </tbody>

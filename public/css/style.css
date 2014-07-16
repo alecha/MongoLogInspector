@@ -1,7 +1,7 @@
 body { padding-top:30px; }
 
 .selected{
-    background-color: #ffff00;
+    background-color: lightgrey;
 }
 
 .sidebarContainer{
