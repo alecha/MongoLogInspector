@@ -5,12 +5,12 @@ body { padding-top:30px; }
 }
 
 .sidebarContainer{
-    position: absolute;
-    left: 0;
-    max-width: 175px;
-    word-wrap: break-word;
-    font-size: 10px;
-}
+          position: absolute;
+          left: 0;
+          max-width: 175px;
+          word-wrap: break-word;
+          font-size: 10px;
+      }
 
 table{
     font-size:11px;
